@@ -1,0 +1,59 @@
+{
+  "name": "blowvpn",
+  "version": "1.0.0",
+  "description": "blowvpn — VPN subscription manager desktop client",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build:web": "cd ../artifacts/naixvpn && pnpm run build && xcopy /E /I /Y dist ..\\..\\blowvpn-electron\\web 2>nul || cp -r dist ../../blowvpn-electron/web",
+    "build:win": "npm run build:web && electron-builder --win",
+    "build:mac": "npm run build:web && electron-builder --mac",
+    "build:linux": "npm run build:web && electron-builder --linux",
+    "dev": "npm run build:web && electron ."
+  },
+  "build": {
+    "appId": "com.blowvpn.app",
+    "productName": "blowvpn",
+    "directories": {
+      "output": "dist-electron"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "web/**/*",
+      "node_modules/**/*"
+    ],
+    "win": {
+      "target": [
+        { "target": "nsis", "arch": ["x64"] }
+      ],
+      "icon": "build/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "installerIcon": "build/icon.ico",
+      "uninstallerIcon": "build/icon.ico",
+      "installerHeaderIcon": "build/icon.ico",
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "blowvpn"
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "build/icon.icns"
+    },
+    "linux": {
+      "target": "AppImage",
+      "icon": "build/icon.png"
+    }
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "electron": "^31.0.0",
+    "electron-builder": "^24.13.3"
+  }
+}
